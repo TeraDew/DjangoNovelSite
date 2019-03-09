@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ book.title }}-{{ book.author }}{% endblock %}
+{% block home %}active{% endblock %}
+
+{% block content %}
+<h1>{{ book.title }}</h1>
+        <h2>{{ book.author }}</h2>
+        {% for chapter in chapters %}
+        <p><a href="{% url 'chapter_detail' chapter.pk %}">{{ chapter.title }}</a></p>
+        {% empty %}
+        <p>暂无章节</p>
+        {% endfor %}
+        
+{% endblock %}

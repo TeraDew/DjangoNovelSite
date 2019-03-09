@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+{% block home %}active{% endblock %}
+
+{% block content %}
+
+        {% for book in book_list %}
+        <a href="{% url 'book_detail' book.pk%}">{{ book.title }}--作者：{{book.author}}</p>
+        {% empty %}
+        <p>暂无书籍</p>
+        {% endfor %}
+{% endblock %}
