@@ -5,12 +5,24 @@
 {% block home %}active{% endblock %}
 
 {% block content %}
-<h1>{{ book.title }}</h1>
-        <h2>{{ book.author }}</h2>
+<div class="container">
+    <div class ="row">
+        <div class="col-sm-12">
+            <h3>{{ book.title }}</h1>
+            <h4>{{ book.author }}</h2>
+        </div>
         {% for chapter in chapters %}
-        <p><a href="{% url 'chapter_detail' chapter.pk %}">{{ chapter.title }}</a></p>
+        <div class="col-sm-4">
+            <p><a href="{% url 'chapter_detail' chapter.pk %}">{{ chapter.title }}</a></p>
+        </div>
         {% empty %}
-        <p>暂无章节</p>
-        {% endfor %}
-        
+        <div class="col-sm-4">            
+            <p>暂无章节</p>            
+        </div>    
+        {% endfor %}    
+    </div>
+</div>
+
+
+
 {% endblock %}
