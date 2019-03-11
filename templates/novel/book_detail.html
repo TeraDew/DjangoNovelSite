@@ -2,14 +2,20 @@
 {% load static %}
 
 {% block title %}{{ book.title }}-{{ book.author }}{% endblock %}
-{% block home %}active{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class ="row">
         <div class="col-sm-12">
-            <h3>{{ book.title }}</h1>
-            <h4>{{ book.author }}</h2>
+            <h3>{{ book.title }}</h3>
+            <h4>{{ book.author }}</h4>
+            {% if user.is_authenticated %}
+                {% if book in user.favorates.all %}
+                    <button class="btn btn-outline-success my-2 my-sm-0"><a href="#">Remove Favorates</button>
+                {% else %}
+                <button class="btn btn-outline-success my-2 my-sm-0"><a href="#">Add to Favorates</button>
+                {% endif %}
+            {% endif %}
         </div>
         {% for chapter in chapters %}
         <div class="col-sm-4">

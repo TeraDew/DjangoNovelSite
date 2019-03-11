@@ -5,10 +5,12 @@
 {% block home %}active{% endblock %}
 
 {% block content %}
-<h2>{{ chapter.title }}</h1>
-    <p>更新时间{{ chapter.created_time }}</p>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
+<div class ="text-center">
+    <h3 class="center-block">{{ chapter.title }}</h3>              
+    <p class="center-block">更新时间{{ chapter.created_time }}</p>
+</div> 
+    <nav aria-label="Page navigation example" class="center-block">
+        <ul class="pagination justify-content-center">
             {% if chapter.get_previous_by_created_time %}
             {% ifequal chapter.get_previous_by_created_time.book chapter.book %}
             <li class="page-item">
@@ -16,12 +18,12 @@
             </li>
             {% else %}
             <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                <a class="page-link" href="#" tabindex="-1">上一章</a>
             </li>
             {% endifequal %}
             {% else %}
             <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                <a class="page-link" href="#" tabindex="-1">上一章</a>
             </li>
             {% endif %}
             <li class="page-item"><a class="page-link" href="{% url 'book_detail' chapter.book.pk %}">目录</a></li>
@@ -42,9 +44,16 @@
             {% endif %}
         </ul>
     </nav>
-    <div>{{ chapter.body|safe }}</div>
+  
+<div class="container">
+    <div class ="row"> 
+        <div>
+            {{ chapter.body|safe }}
+        </div>
+    </div>
+</div>
     <nav aria-label="Page navigation example">
-        <ul class="pagination">
+        <ul class="pagination justify-content-center">
             {% if chapter.get_previous_by_created_time %}
             {% ifequal chapter.get_previous_by_created_time.book chapter.book %}
             <li class="page-item">

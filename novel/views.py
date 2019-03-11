@@ -15,7 +15,7 @@ def index(request):
 
 def book_detail_view(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
-    chapters = get_list_or_404(Chapter, book=book_id)
+    chapters =Chapter.objects.filter(book=book)
     return render(request, 'novel/book_detail.html', context={
         'book': book,
         'chapters': chapters

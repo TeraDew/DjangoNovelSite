@@ -16,21 +16,34 @@
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                           <span class="navbar-toggler-icon"></span>
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                          <ul class="navbar-nav">
-                            <li class="nav-item {% block home %}{% endblock %}">
-                              <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                          <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                              <a class="nav-link" href="">My Shelf</a>
                             </li>
-                            <li class="nav-item {% block tag %}{% endblock %}">
-                              <a class="nav-link" href="">Tags</a>
+                            <li class="nav-item">
+                              <a class="nav-link" href="">My Upload</a>
                             </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ user.username }}
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Sign Out</a>
+                                <a class="dropdown-item" href="{% url 'password_change' %}?next={{ request.path }}">Change Password</a>                        
+                              </div>
+                            </li>
+                            {% else %}
+                            <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'login' %}?next={{ request.path }}">Sign In</button>
+                            {% endif %}
                           </ul>
-                        </div>
                       </nav>
-            {% block content %}{% endblock %}
+            {% block content %}
+            {% endblock %}
   
         <div class="jumbotron text-center" style="margin-bottom:0">
-            <a href="/">返回首页</a>
+            <a href="/">Web Novel Site</a>
           </div>
     </body>
 </html>
