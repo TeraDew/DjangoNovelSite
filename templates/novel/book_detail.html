@@ -4,18 +4,21 @@
 {% block title %}{{ book.title }}-{{ book.author }}{% endblock %}
 
 {% block content %}
+<div class ="text-center">
+    <h3 class="center-block">{{ book.title }}</h3>
+    <p class="center-block">{{ book.author }}</p>
+    {% if user.is_authenticated %}
+                {% if book in user.favorates.all %}
+                    <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'drop' %}">Remove from Shelf</button>
+                {% else %}
+                <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'add' %}">Add to Shelf</button>
+                {% endif %}
+            {% endif %}
+</div> 
 <div class="container">
     <div class ="row">
         <div class="col-sm-12">
-            <h3>{{ book.title }}</h3>
-            <h4>{{ book.author }}</h4>
-            {% if user.is_authenticated %}
-                {% if book in user.favorates.all %}
-                    <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'drop' %}">Remove Favorates</button>
-                {% else %}
-                <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'add' %}">Add to Favorates</button>
-                {% endif %}
-            {% endif %}
+            
         </div>
         {% for chapter in chapters %}
         <div class="col-sm-4">
