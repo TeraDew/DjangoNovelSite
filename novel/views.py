@@ -8,14 +8,16 @@ import markdown
 # Create your views here.
 def index(request):
     book_list = Book.objects.all()
+    page_name = 'Home'
     return render(request, 'novel/index.html', context={
-        'book_list': book_list
+        'book_list': book_list,
+        'page_name': page_name
     })
 
 
 def book_detail_view(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
-    chapters =Chapter.objects.filter(book=book)
+    chapters = Chapter.objects.filter(book=book)
     return render(request, 'novel/book_detail.html', context={
         'book': book,
         'chapters': chapters
