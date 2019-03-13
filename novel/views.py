@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.views.generic import ListView, DetailView
 from .models import Book, Chapter
@@ -37,6 +38,7 @@ def chapter_detail_view(request, chapter_id):
 class BookList(ListView):
     model = Book
     template_name = 'novel/index.html'
+    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         context = super(BookList, self).get_context_data(**kwargs)
