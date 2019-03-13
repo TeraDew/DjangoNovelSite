@@ -65,6 +65,6 @@ class ChapterDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ChapterDetail, self).get_context_data(**kwargs)
-        context['body'] = markdown.markdown(context['object'].body, extensions=[
+        context['object'].body = markdown.markdown(context['object'].body, extensions=[
             'markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc', ])
         return context
