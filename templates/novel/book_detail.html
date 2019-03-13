@@ -9,18 +9,21 @@
     <p class="center-block">{{ book.author }}</p>
     {% if user.is_authenticated %}
                 {% if book in user.favorates.all %}
-                    <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'drop' %}">Remove from Shelf</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0">
+                        <a href="{% url 'users:favorate' book.pk 'drop' %}">Remove from Shelf</a>
+                    </button>
                 {% else %}
-                <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'add' %}">Add to Shelf</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'add' %}">Add to Shelf</a>
+                    </button>
                 {% endif %}
-            {% endif %}
+    {% endif %}
 </div> 
 <div class="container">
     <div class ="row">
         <div class="col-sm-12">
             
         </div>
-        {% for chapter in chapters %}
+        {% for chapter in ChapterList %}
         <div class="col-sm-4">
             <p><a href="{% url 'chapter_detail' chapter.pk %}">{{ chapter.title }}</a></p>
         </div>

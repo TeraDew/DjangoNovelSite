@@ -1,11 +1,12 @@
 from django.urls import path
 
 from . import views
+#from views import BookList
 
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('book/<int:book_id>/', views.book_detail_view, name='book_detail'),
-    path('chapter/<int:chapter_id>/',
-         views.chapter_detail_view, name='chapter_detail'),
+    path('', views.BookList.as_view(), name='index'),
+    path('book/<int:pk>/', views.ChapterList.as_view(), name='book_detail'),
+    path('chapter/<int:pk>/',
+         views.ChapterDetail.as_view(), name='chapter_detail'),
 ]
