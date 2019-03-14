@@ -132,3 +132,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'users.backends.EmailBackend',
 )
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace(
+    '\\', '/')  # media即为图片上传的根路径
+MEDIA_URL = '/media/'

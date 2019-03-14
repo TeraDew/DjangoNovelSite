@@ -5,8 +5,22 @@
 
 {% block content %}
 <div class ="text-center">
+        <div class="container">
+                {% if book.cover %}
+                    <img src="{{ book.cover.url }}" height="200">
+                {% endif %}
+            </div>
     <h3 class="center-block">{{ book.title }}</h3>
-    <p class="center-block">{{ book.author }}</p>
+    <p class="center-block">
+            {% for author in book.authors.all %}
+            {{ author }}
+                {% if not forloop.last %}
+                ,
+                {% endif %}
+            {% empty %}
+            ??
+            {% endfor %}
+    </p>
     {% if user.is_authenticated %}
                 {% if book in user.favorates.all %}
                     <button class="btn btn-outline-success my-2 my-sm-0">

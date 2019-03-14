@@ -1,6 +1,7 @@
 *.pyc
 *.txt
 *.zip
+media/
 migrations/
 novel/static/
 __pycache__

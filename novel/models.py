@@ -27,10 +27,11 @@ class Author(models.Model):
 class Book(models.Model):
 
     title = models.CharField(max_length=100)
+    cover = models.ImageField(upload_to='img', blank=True)
     intro = models.CharField(max_length=800)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     tags = models.ManyToManyField(Tag, blank=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    authors = models.ManyToManyField(Author, blank=True)
 
     def __str__(self):
         return self.title

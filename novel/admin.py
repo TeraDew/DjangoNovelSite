@@ -4,7 +4,10 @@ from novel.models import Category, Tag, Author, Chapter, Book
 
 # Register your models here.
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'category']
+    list_display = ['title', 'category', 'show_authors']
+
+    def show_authors(self, obj):
+        return '\t'.join([a.name for a in obj.authors.all()])
 
 
 class ChapterAdmin(admin.ModelAdmin):
