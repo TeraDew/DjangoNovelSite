@@ -1,4 +1,5 @@
 {% load static %}
+{% load novel_tags %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +14,7 @@
         
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                         <a class="navbar-brand" href="/">Web Novel Site</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                           <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -26,18 +27,42 @@
                             </li>
                             {% if user.is_authenticated %}
                             <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Reading History
+                                </a> 
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">                            
+                                {% get_recent_history as recent_history_list %}
+                                {% for history in recent_history_list %}
+                                <a class="dropdown-item" href="{% url 'chapter_detail' history.read_chapter.pk %}">{{ history.read_chapter.title }}</a>
+                                {% empty %}
+                                No history recorded.
+                                {% endfor %}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">More Reading History...</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ user.username }}
                               </a>
                               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Sign Out</a>
-                                <a class="dropdown-item" href="{% url 'password_change' %}?next={{ request.path }}">Change Password</a>                        
+                                <a class="dropdown-item" href="{% url 'password_change' %}?next={{ request.path }}">Change Password</a>                                
                               </div>
                             </li>
                             {% else %}
-                            <button class="btn btn-outline-success my-2 my-sm-0">
-                              <a href="{% url 'login' %}?next={{ request.path }}">Sign In</a>
-                            </button>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">
+                                  Reading History
+                                </a>
+                            </li>
+                            <li>
+                              <a href="{% url 'login' %}?next={{ request.path }}">
+                                <button class="btn btn-outline-success my-2 my-sm-0">
+                                  Sign In
+                                </button>
+                              </a>
+                            </li>                            
                             {% endif %}
                           </ul>
                       </nav>

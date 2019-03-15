@@ -9,80 +9,56 @@
     <h3 class="center-block">{{ chapter.title }}</h3>              
     <p class="center-block">更新时间{{ chapter.created_time }}</p>
 </div> 
-    <nav aria-label="Page navigation example" class="center-block">
-        <ul class="pagination justify-content-center">
-            {% if chapter.get_previous_by_created_time %}
-            {% ifequal chapter.get_previous_by_created_time.book chapter.book %}
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if chapter_prev %}
             <li class="page-item">
-                <a class="page-link" href="{% url 'chapter_detail' chapter.get_previous_by_created_time.pk %}">上一章</a>
+                <a class="page-link" href="{% url 'chapter_detail' chapter_prev.pk %}">上一章</a>
             </li>
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">上一章</a>
-            </li>
-            {% endifequal %}
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">上一章</a>
-            </li>
-            {% endif %}
-            <li class="page-item"><a class="page-link" href="{% url 'book_detail' chapter.book.pk %}">目录</a></li>
-            {% if chapter.get_next_by_created_time %}
-            {% ifequal chapter.get_next_by_created_time.book chapter.book %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">上一章</a>
+        </li>
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="{% url 'book_detail' chapter.book.pk %}">目录</a></li>
+        {% if chapter_next %}
             <li class="page-item">
-                <a class="page-link" href="{% url 'chapter_detail' chapter.get_next_by_created_time.pk %}">下一章</a>
+                <a class="page-link" href="{% url 'chapter_detail' chapter_next.pk %}">上一章</a>
             </li>
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">下一章</a>
-            </li>
-            {% endifequal %}
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">下一章</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">上一章</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
   
 <div class="container">
-    <div class ="row"> 
+    <div class ="row mx-1"> 
         <div>
-            {{ chapter.body|safe }}
+            {{ body|safe }}
         </div>
     </div>
 </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            {% if chapter.get_previous_by_created_time %}
-                {% ifequal chapter.get_previous_by_created_time.book chapter.book %}
+            {% if chapter_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{% url 'chapter_detail' chapter.get_previous_by_created_time.pk %}">上一章</a>
+                    <a class="page-link" href="{% url 'chapter_detail' chapter_prev.pk %}">上一章</a>
                 </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                {% endifequal %}
             {% else %}
             <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1">上一章</a>
             </li>
             {% endif %}
             <li class="page-item"><a class="page-link" href="{% url 'book_detail' chapter.book.pk %}">目录</a></li>
-            {% if chapter.get_next_by_created_time %}
-            {% ifequal chapter.get_next_by_created_time.book chapter.book %}
-            <li class="page-item">
-                <a class="page-link" href="{% url 'chapter_detail' chapter.get_next_by_created_time.pk %}">下一章</a>
-            </li>
+            {% if chapter_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'chapter_detail' chapter_next.pk %}">上一章</a>
+                </li>
             {% else %}
             <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">下一章</a>
-            </li>
-            {% endifequal %}
-            {% else %}
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">下一章</a>
+                <a class="page-link" href="#" tabindex="-1">上一章</a>
             </li>
             {% endif %}
         </ul>

@@ -1,3 +1,4 @@
+# coding:utf-8
 from django.shortcuts import render, redirect, HttpResponseRedirect, Http404
 from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required

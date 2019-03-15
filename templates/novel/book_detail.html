@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ book.title }}-{{ book.author }}{% endblock %}
+{% block title %}
+{{ book.title }}-
+{% for author in book.authors.all %}
+{{ author }}
+    {% if not forloop.last %}
+    ,
+    {% endif %}
+{% empty %}
+??
+{% endfor %}
+{% endblock %}
 
 {% block content %}
 <div class ="text-center">
@@ -23,12 +33,17 @@
     </p>
     {% if user.is_authenticated %}
                 {% if book in user.favorates.all %}
+                <a href="{% url 'users:favorate' book.pk 'drop' %}">
                     <button class="btn btn-outline-success my-2 my-sm-0">
-                        <a href="{% url 'users:favorate' book.pk 'drop' %}">Remove from Shelf</a>
+                        Remove from Shelf
                     </button>
+                </a>
                 {% else %}
-                    <button class="btn btn-outline-success my-2 my-sm-0"><a href="{% url 'users:favorate' book.pk 'add' %}">Add to Shelf</a>
+                <a href="{% url 'users:favorate' book.pk 'add' %}">
+                    <button class="btn btn-outline-success my-2 my-sm-0">
+                        Add to Shelf
                     </button>
+                </a>
                 {% endif %}
     {% endif %}
 </div> 

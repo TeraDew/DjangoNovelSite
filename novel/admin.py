@@ -11,7 +11,7 @@ class BookAdmin(admin.ModelAdmin):
 
 
 class ChapterAdmin(admin.ModelAdmin):
-    list_display = ['title', 'book', 'excerpt', 'created_time']
+    list_display = ['chapter_idx','title', 'book', 'excerpt', 'created_time','modified_time']
 
 
 myModels = [Category, Tag, Author]

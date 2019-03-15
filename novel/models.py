@@ -33,11 +33,15 @@ class Book(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     authors = models.ManyToManyField(Author, blank=True)
 
+    class Meta:
+        ordering = ['-pk']
+
     def __str__(self):
         return self.title
 
 
 class Chapter(models.Model):
+    chapter_idx = models.IntegerField()
     title = models.CharField(max_length=100)
     created_time = models.DateTimeField()
     modified_time = models.DateTimeField()
