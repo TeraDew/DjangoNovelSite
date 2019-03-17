@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load novel_tags %}
 
 {% block title %}
 {{ book.title }}-
@@ -14,53 +15,49 @@
 {% endblock %}
 
 {% block content %}
-<div class ="text-center">
-        <div class="container">
-                {% if book.cover %}
-                    <img src="{{ book.cover.url }}" height="200">
-                {% endif %}
-            </div>
-    <h3 class="center-block">{{ book.title }}</h3>
-    <p class="center-block">
-            {% for author in book.authors.all %}
-            {{ author }}
-                {% if not forloop.last %}
-                ,
-                {% endif %}
-            {% empty %}
-            ??
-            {% endfor %}
-    </p>
-    {% if user.is_authenticated %}
-                {% if book in user.favorates.all %}
-                <a href="{% url 'users:favorate' book.pk 'drop' %}">
-                    <button class="btn btn-outline-success my-2 my-sm-0">
-                        Remove from Shelf
-                    </button>
-                </a>
-                {% else %}
-                <a href="{% url 'users:favorate' book.pk 'add' %}">
-                    <button class="btn btn-outline-success my-2 my-sm-0">
-                        Add to Shelf
-                    </button>
-                </a>
-                {% endif %}
-    {% endif %}
-</div> 
 <div class="container">
     <div class ="row">
-        <div class="col-sm-12">
-            
+        <div class="card" style="width:20rem;">
+            <img class="card-img-top" src="{% if book.cover %}{{ book.cover.url }}{% else %}{% static 'novel/img/nocoveratpresent.jpg' %}{% endif %}" alt="Book Cover">
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <h6 class="card-subtilte">
+                    {% for author in book.authors.all %}
+                        {{ author }}
+                            {% if not forloop.last %}
+                            ,
+                            {% endif %}
+                        {% empty %}
+                        ??
+                    {% endfor %}
+                </h4>
+                <p class="card-text">{{book.intro}}</p>
+                {% if user.is_authenticated %}
+                    {% if request.user in book.favorated_user.all %}
+                    <a href="{% url 'novel:favorate' book.pk 'remove' %}">                   
+                        Remove from Shelf                    
+                    </a>
+                    {% else %}
+                    <a href="{% url 'novel:favorate' book.pk 'add' %}">                    
+                        Add to Shelf
+                    </a>        
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
-        {% for chapter in ChapterList %}
-        <div class="col-sm-4">
-            <p><a href="{% url 'chapter_detail' chapter.pk %}">{{ chapter.title }}</a></p>
+        <div class="container">
+            <div class="row">
+                {% for chapter in ChapterList %}
+                <div class="col-sm-4">
+                    <p><a href="{% url 'novel:chapter_detail' chapter.pk %}">{{ chapter.title }}</a></p>
+                </div>
+                {% empty %}
+                <div class="col-sm-4">            
+                    <p>暂无章节</p>            
+                </div>    
+                {% endfor %}    
+            </div>
         </div>
-        {% empty %}
-        <div class="col-sm-4">            
-            <p>暂无章节</p>            
-        </div>    
-        {% endfor %}    
     </div>
 </div>
 

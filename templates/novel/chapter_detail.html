@@ -13,17 +13,17 @@
     <ul class="pagination justify-content-center">
         {% if chapter_prev %}
             <li class="page-item">
-                <a class="page-link" href="{% url 'chapter_detail' chapter_prev.pk %}">上一章</a>
+                <a class="page-link" href="{% url 'novel:chapter_detail' chapter_prev.pk %}">上一章</a>
             </li>
         {% else %}
         <li class="page-item disabled">
             <a class="page-link" href="#" tabindex="-1">上一章</a>
         </li>
         {% endif %}
-        <li class="page-item"><a class="page-link" href="{% url 'book_detail' chapter.book.pk %}">目录</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'novel:book_detail' chapter.book.pk %}">目录</a></li>
         {% if chapter_next %}
             <li class="page-item">
-                <a class="page-link" href="{% url 'chapter_detail' chapter_next.pk %}">上一章</a>
+                <a class="page-link" href="{% url 'novel:chapter_detail' chapter_next.pk %}">上一章</a>
             </li>
         {% else %}
         <li class="page-item disabled">
@@ -44,17 +44,17 @@
         <ul class="pagination justify-content-center">
             {% if chapter_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{% url 'chapter_detail' chapter_prev.pk %}">上一章</a>
+                    <a class="page-link" href="{% url 'novel:chapter_detail' chapter_prev.pk %}">上一章</a>
                 </li>
             {% else %}
             <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1">上一章</a>
             </li>
             {% endif %}
-            <li class="page-item"><a class="page-link" href="{% url 'book_detail' chapter.book.pk %}">目录</a></li>
+            <li class="page-item"><a class="page-link" href="{% url 'novel:book_detail' chapter.book.pk %}">目录</a></li>
             {% if chapter_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{% url 'chapter_detail' chapter_next.pk %}">上一章</a>
+                    <a class="page-link" href="{% url 'novel:chapter_detail' chapter_next.pk %}">上一章</a>
                 </li>
             {% else %}
             <li class="page-item disabled">

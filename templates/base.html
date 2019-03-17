@@ -20,10 +20,10 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                           <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                              <a class="nav-link" href="{% url 'users:shelf' %}">My Shelf</a>
+                              <a class="nav-link" href="{% url 'novel:shelf' %}">My Shelf</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" href="">My Upload</a>
+                              <a class="nav-link" href="{% url 'novel:book_create' %}">Create Book</a>
                             </li>
                             {% if user.is_authenticated %}
                             <li class="nav-item dropdown">
@@ -33,7 +33,7 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">                            
                                 {% get_recent_history as recent_history_list %}
                                 {% for history in recent_history_list %}
-                                <a class="dropdown-item" href="{% url 'chapter_detail' history.read_chapter.pk %}">{{ history.read_chapter.title }}</a>
+                                <a class="dropdown-item" href="{% url 'novel:chapter_detail' history.read_chapter.pk %}">{{ history.read_chapter.title }}</a>
                                 {% empty %}
                                 No history recorded.
                                 {% endfor %}

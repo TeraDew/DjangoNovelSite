@@ -15,17 +15,17 @@
 <div class="container">
     <div class ="row">
         {% for book in book_list %}
-        <div class ="col-sm-6">
+        <div class ="col-sm-3">
             <div class="container">
+                <a href="{% url 'novel:book_detail' book.pk%}"><img src="
                 {% if book.cover %}
-                    <a href="{% url 'book_detail' book.pk%}"><img src="{{ book.cover.url }}" height="200"></a>
+                   {{ book.cover.url }}
                 {% else %}
-                <div class="coverimg">                
-                    暂无封面
-                </div>
+                    {% static 'novel/img/nocoveratpresent.jpg' %}
                 {% endif %}
+                " height="200"></a>
             </div>
-            <h4><a href="{% url 'book_detail' book.pk%}">{{ book.title }}</a></h4>
+            <h4><a href="{% url 'novel:book_detail' book.pk%}">{{ book.title }}</a></h4>
             <p>
                 {% for author in book.authors.all %}
                 {{ author }}
