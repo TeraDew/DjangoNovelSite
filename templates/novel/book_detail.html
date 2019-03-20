@@ -38,11 +38,12 @@
                         Remove from Shelf                    
                     </a>
                     {% else %}
-                    <a href="{% url 'novel:favorate' book.pk 'add' %}">                    
+                    <a href="{% url 'novel:favorate' book.pk 'add' %}" class="card-link">                    
                         Add to Shelf
                     </a>        
                     {% endif %}
                 {% endif %}
+                {% ifequal request.user book.uploader %}<a href="{% url 'novel:chapter_create' book.pk %}" class="card-link">Add chapter</a>{% endifequal %} 
             </div>
         </div>
         <div class="container">

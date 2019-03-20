@@ -1,10 +1,11 @@
 # coding:utf-8
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, get_list_or_404, HttpResponseRedirect, Http404, redirect
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView, DetailView, CreateView
 from .models import Book, Chapter, History
 from django.utils import timezone
 from django.urls import reverse
@@ -154,6 +155,7 @@ def create_book(request):
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             instance = form.save()
+            instance.uploader = request.user
             return HttpResponseRedirect(reverse('novel:book_detail', args=(instance.pk,)))
     else:
         form = BookForm()
@@ -198,3 +200,41 @@ def CategoryCreatePopup(request):
         return HttpResponse('<script>opener.closePopup(window, "%s", "%s", "#id_category");</script>' % (instance.pk, instance))
 
     return render(request, "novel/add_form.html", {'form': form, 'model': 'Category'})
+
+
+class CreateChapter(CreateView):
+    model = Chapter
+    fields = ['title', 'excerpt', 'body']
+
+    @method_decorator(login_required(login_url='login'))
+    def dispatch(self, *args, **kwargs):
+        if(get_object_or_404(Book, pk=self.kwargs['pk']).uploader != self.request.user):
+            return HttpResponseForbidden('You are not allowed to add chapter for this book.')
+        return super(CreateChapter, self).dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('novel:chapter_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        form.instance.book = get_object_or_404(Book, pk=self.kwargs['pk'])
+
+        form.instance.chapter_idx = len(
+            get_list_or_404(Chapter, book=form.instance.book))+1
+        form.instance.created_time = timezone.now()
+        return super(CreateChapter, self).form_valid(form)
+
+
+class CreateBook(CreateView):
+    model = Book
+    fields = ['title', 'cover', 'intro', 'category', 'authors']
+
+    @method_decorator(login_required(login_url='login'))
+    def dispatch(self, *args, **kwargs):
+        return super(CreateBook, self).dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('novel:book_detail', kwargs={'pk': self.object.pk})
+
+    def form_valid(self, form):
+        form.instance.uploader = self.request.user
+        return super(CreateBook, self).form_valid(form)

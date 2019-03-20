@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Book{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+    function showEditPopup(url) {
+        var win = window.open(url, "Edit", 
+            'height=500,width=800,resizable=yes,scrollbars=yes');
+        return false;
+    }
+    function showAddPopup(triggeringLink) {
+        var name = triggeringLink.id.replace(/^add_/, '');
+        href = triggeringLink.href;
+        var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
+        win.focus();
+        return false;
+    }
+    function closePopup(win, newID, newRepr, id) {
+        $(id).append('<option value=' + newID + ' selected >' + newRepr + '</option>')
+        win.close();
+    }
+
+    $("#edit_author").click(function(){
+	    author_name = $("#id_author option:selected").text();
+        var data = {"author_name":author_name};
+        $.ajax({
+            type : 'GET',
+            url :  '/author/ajax/get_author_id',
+            data : data,
+            success : function(data){
+                var url = "/author/" + data['author_id'] + "/edit/";
+                showEditPopup(url);
+            },
+            error: function(data) {
+            alert("Something Went Wrong"); 
+            }
+        });
+    })
+    
+</script>
+
+<div class="container">
+    <div class="row">
+        
+        <div class ="col-sm-6">
+            <div class="container">
+                <!-- {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} -->
+                <h3 class="center-block">Create Book</h3>
+                <form action="{% url 'novel:book_create' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- <div class="form-group">
+                        <label for="author">Authors:</label>
+                        {{form.authors}}                
+                        <a href="{% url 'novel:AuthorCreate' %}" id="add_author" onclick="return showAddPopup(this);"><img src = "{% static 'novel/img/icon-addlink.svg' %}"></a>
+                    </div> -->
+                    <!-- <a id="edit_author" style="cursor: pointer; cursor: hand;"><img src = "{% static '/images/icon-changelink.svg' %}"></a> -->
+                    <!-- <input type="text" name="authors"><br> -->
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {{ field.errors }}
+                        {% if field.help_text %}
+                            <p class="help text-small text-muted">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <a href="{% url 'novel:AuthorCreate' %}" id="add_author" onclick="return showAddPopup(this);"><img src = "{% static 'novel/img/icon-addlink.svg' %}">Add Author</a>
+                    <a href="{% url 'novel:CategoryCreate' %}" id="add_category" onclick="return showAddPopup(this);"><img src = "{% static 'novel/img/icon-addlink.svg' %}">Add Category</a>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}

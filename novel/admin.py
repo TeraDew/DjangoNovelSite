@@ -5,7 +5,7 @@ from .models import User
 
 # Register your models here.
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'show_authors']
+    list_display = ['title', 'category', 'show_authors','uploader']
 
     def show_authors(self, obj):
         return '\t'.join([a.name for a in obj.authors.all()])
