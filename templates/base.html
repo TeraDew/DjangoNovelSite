@@ -7,70 +7,80 @@
         <title>{% block title %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="{% static 'novel/css/bootstrap.min.css' %}">
-        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-        <script src="{% static 'novel/js/bootstrap.min.js' %}"></script>
+      
     </head>
     <body>
-        
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <a class="navbar-brand" href="/">Web Novel Site</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                          <span class="navbar-toggler-icon"></span>
+      <header>        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="/">Web Novel Site</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'novel:shelf' %}">My Shelf</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'novel:book_create' %}">Create Book</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Reading History
+                        </a> 
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">                            
+                        {% get_recent_history as recent_history_list %}
+                        {% for history in recent_history_list %}
+                        <a class="dropdown-item" href="{% url 'novel:chapter_detail' history.read_chapter.pk %}">{{ history.read_chapter.title }}</a>
+                        {% empty %}
+                        No history recorded.
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">More Reading History...</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ user.username }}
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Sign Out</a>
+                        <a class="dropdown-item" href="{% url 'password_change' %}?next={{ request.path }}">Change Password</a>                                
+                      </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">
+                          Reading History
+                        </a>
+                    </li>
+                    <li>
+                      <a href="{% url 'login' %}?next={{ request.path }}">
+                        <button class="btn btn-outline-success my-2 my-sm-0">
+                          Sign In
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                          <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                              <a class="nav-link" href="{% url 'novel:shelf' %}">My Shelf</a>
-                            </li>
-                            <li class="nav-item">
-                              <a class="nav-link" href="{% url 'novel:book_create' %}">Create Book</a>
-                            </li>
-                            {% if user.is_authenticated %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Reading History
-                                </a> 
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">                            
-                                {% get_recent_history as recent_history_list %}
-                                {% for history in recent_history_list %}
-                                <a class="dropdown-item" href="{% url 'novel:chapter_detail' history.read_chapter.pk %}">{{ history.read_chapter.title }}</a>
-                                {% empty %}
-                                No history recorded.
-                                {% endfor %}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">More Reading History...</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ user.username }}
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Sign Out</a>
-                                <a class="dropdown-item" href="{% url 'password_change' %}?next={{ request.path }}">Change Password</a>                                
-                              </div>
-                            </li>
-                            {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">
-                                  Reading History
-                                </a>
-                            </li>
-                            <li>
-                              <a href="{% url 'login' %}?next={{ request.path }}">
-                                <button class="btn btn-outline-success my-2 my-sm-0">
-                                  Sign In
-                                </button>
-                              </a>
-                            </li>                            
-                            {% endif %}
-                          </ul>
-                      </nav>
-            {% block content %}
-            {% endblock %}
-  
-        <div class="jumbotron text-center" style="margin-bottom:0">
-            <a href="/">Web Novel Site</a>
-          </div>
+                      </a>
+                    </li>                            
+                    {% endif %}
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0" method="GET" id="searchform" action="{% url 'novel:search' %}">
+                      <input class="form-control mr-sm-2" type="search" placeholder="Search Book or Author" aria-label="Search" name="q" required>
+                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                  </div>
+          </nav>
+          </header>
+                {% block content %}
+                {% endblock %}
+      <div class="jumbotron text-center" style="margin-bottom:0">
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">GitHub</a></li>
+              </ul>
+      </div>
+      <script src="{% static 'novel/js/bootstrap.min.js' %}"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+      <script src="{% static 'novel/js/bootstrap.bundle.min.js' %}"></script>
     </body>
 </html>

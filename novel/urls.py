@@ -18,4 +18,5 @@ urlpatterns = [
     path('category/create/', views.CategoryCreatePopup, name='CategoryCreate'),
     path('chapter/create/<int:pk>/',
          views.CreateChapter.as_view(), name='chapter_create'),
+    path('search/', views.search, name='search'),
 ]

@@ -9,37 +9,13 @@ from django.views.generic import ListView, DetailView, CreateView
 from .models import Book, Chapter, History
 from django.utils import timezone
 from django.urls import reverse
+from django.db.models import Q
 import markdown
 from .forms import BookForm, AuthorForm, CategoryForm
 from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
-def index(request):
-    book_list = Book.objects.all()
-    page_name = 'Home'
-    return render(request, 'novel/index.html', context={
-        'book_list': book_list,
-        'page_name': page_name
-    })
-
-
-def book_detail_view(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    chapters = Chapter.objects.filter(book=book)
-    return render(request, 'novel/book_detail.html', context={
-        'book': book,
-        'chapters': chapters
-    })
-
-
-def chapter_detail_view(request, chapter_id):
-    chapter = get_object_or_404(Chapter, pk=chapter_id)
-    chapter.body = markdown.markdown(chapter.body, extensions=[
-                                     'markdown.extensions.extra', 'markdown.extensions.codehilite', 'markdown.extensions.toc', ])
-    return render(request, 'novel/chapter_detail.html', context={
-        'chapter': chapter,
-    })
 
 
 def str_to_html(str):
@@ -53,7 +29,7 @@ def str_to_html(str):
 class BookList(ListView):
     model = Book
     template_name = 'novel/index.html'
-    paginate_by = 2
+    paginate_by = 12
 
     def get_context_data(self, **kwargs):
         context = super(BookList, self).get_context_data(**kwargs)
@@ -163,6 +139,7 @@ def create_book(request):
     return render(request, 'novel/create_book.html', context={'form': form})
 
 
+@login_required(login_url='login')
 def AuthorCreatePopup(request):
     form = AuthorForm(request.POST or None)
     if form.is_valid():
@@ -172,6 +149,7 @@ def AuthorCreatePopup(request):
     return render(request, "novel/add_form.html", {'form': form, 'model': 'Author'})
 
 
+@login_required(login_url='login')
 def AuthorEditPopup(request, pk=None):
     instance = get_object_or_404(Author, pk=pk)
     form = AuthorForm(request.POST or None, instance=instance)
@@ -193,6 +171,7 @@ def get_author_id(request):
     return HttpResponse("/")
 
 
+@login_required(login_url='login')
 def CategoryCreatePopup(request):
     form = CategoryForm(request.POST or None)
     if form.is_valid():
@@ -238,3 +217,17 @@ class CreateBook(CreateView):
     def form_valid(self, form):
         form.instance.uploader = self.request.user
         return super(CreateBook, self).form_valid(form)
+
+
+def search(request):
+    q = request.GET.get('q')
+    err_msg = ''
+
+    if not q:
+        err_msg = 'please input key word'
+        return render(request, 'novel/index.html', {'error_msg': err_msg})
+
+    book_list = Book.objects.filter(
+        Q(title__icontains=q) | Q(authors__name__icontains=q)).distinct()
+    return render(request, 'novel/index.html', {'error_msg': err_msg,
+                                                'book_list': book_list})
